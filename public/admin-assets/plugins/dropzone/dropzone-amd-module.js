@@ -6688,7 +6688,7 @@ $({ global: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -6701,14 +6701,14 @@ $({ global: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	!function() {
@@ -6721,7 +6721,7 @@ $({ global: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
 /******/ 			}
 /******/ 		};
 /******/ 	}();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/global */
 /******/ 	!function() {
 /******/ 		__webpack_require__.g = (function() {
@@ -6733,12 +6733,12 @@ $({ global: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
 /******/ 			}
 /******/ 		})();
 /******/ 	}();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	!function() {
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	!function() {
 /******/ 		// define __esModule on exports
@@ -6749,7 +6749,7 @@ $({ global: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
 /******/ 	}();
-/******/ 	
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
@@ -6990,7 +6990,7 @@ var Emitter = /*#__PURE__*/function () {
 
 ;// CONCATENATED MODULE: ./src/preview-template.html
 // Module
-var code = "<div class=\"dz-preview dz-file-preview\"> <div class=\"dz-image\"><img data-dz-thumbnail/></div> <div class=\"dz-details\"> <div class=\"dz-size\"><span data-dz-size></span></div> <div class=\"dz-filename\"><span data-dz-name></span></div> </div> <div class=\"dz-progress\"> <span class=\"dz-upload\" data-dz-uploadprogress></span> </div> <div class=\"dz-error-message\"><span data-dz-errormessage></span></div> <div class=\"dz-success-mark\"> <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <title>Check</title> <g stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\"> <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\"></path> </g> </svg> </div> <div class=\"dz-error-mark\"> <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <title>Error</title> <g stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\"> <g stroke=\"#747474\" stroke-opacity=\"0.198794158\" fill=\"#FFFFFF\" fill-opacity=\"0.816519475\"> <path d=\"M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\"></path> </g> </g> </svg> </div> </div> ";
+var code = "<div class=\"dz-preview dz-file-preview\"> <div class=\"dz-image\"><img data-dz-thumbnail/></div> <div class=\"dz-details\"> <div class=\"dz-size\"><span data-dz-size></span></div> <div class=\"dz-filename\"><span data-dz-name></span></div> </div> <div class=\"dz-progress\"> <span class=\"dz-uploads\" data-dz-uploadprogress></span> </div> <div class=\"dz-error-message\"><span data-dz-errormessage></span></div> <div class=\"dz-success-mark\"> <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <title>Check</title> <g stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\"> <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\"></path> </g> </svg> </div> <div class=\"dz-error-mark\"> <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <title>Error</title> <g stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\"> <g stroke=\"#747474\" stroke-opacity=\"0.198794158\" fill=\"#FFFFFF\" fill-opacity=\"0.816519475\"> <path d=\"M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\"></path> </g> </g> </svg> </div> </div> ";
 // Exports
 /* harmony default export */ var preview_template = (code);
 ;// CONCATENATED MODULE: ./src/options.js
@@ -7052,7 +7052,7 @@ var defaultOptions = {
    * Whether you want files to be uploaded in chunks to your server. This can't be
    * used in combination with `uploadMultiple`.
    *
-   * See [chunksUploaded](#config-chunksUploaded) for the callback to finalise an upload.
+   * See [chunksUploaded](#config-chunksUploaded) for the callback to finalise an uploads.
    */
   chunking: false,
 
@@ -7183,7 +7183,7 @@ var defaultOptions = {
    *
    * You can also pass an HTML element, a CSS selector (for multiple elements)
    * or an array of those. In that case, all of those elements will trigger an
-   * upload when clicked.
+   * uploads when clicked.
    */
   clickable: true,
 
@@ -7276,7 +7276,7 @@ var defaultOptions = {
   /**
    * A function that is invoked before the file is uploaded to the server and renames the file.
    * This function gets the `File` as argument and can use the `file.name`. The actual name of the
-   * file that gets used during the upload can be accessed through `file.upload.filename`.
+   * file that gets used during the uploads can be accessed through `file.uploads.filename`.
    */
   renameFile: null,
 
@@ -7291,7 +7291,7 @@ var defaultOptions = {
   /**
    * The text used before any files are dropped.
    */
-  dictDefaultMessage: "Drop files here to upload",
+  dictDefaultMessage: "Drop files here to uploads",
 
   /**
    * The text that replaces the default message text it the browser is not supported.
@@ -7303,7 +7303,7 @@ var defaultOptions = {
    * If you provide a  fallback element yourself, or if this option is `null` this will
    * be ignored.
    */
-  dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
+  dictFallbackText: "Please use the fallback form below to uploads your files like in the olden days.",
 
   /**
    * If the filesize is too big.
@@ -7314,7 +7314,7 @@ var defaultOptions = {
   /**
    * If the file doesn't match the file type.
    */
-  dictInvalidFileType: "You can't upload files of this type.",
+  dictInvalidFileType: "You can't uploads files of this type.",
 
   /**
    * If the server response was invalid.
@@ -7323,19 +7323,19 @@ var defaultOptions = {
   dictResponseError: "Server responded with {{statusCode}} code.",
 
   /**
-   * If `addRemoveLinks` is true, the text to be used for the cancel upload link.
+   * If `addRemoveLinks` is true, the text to be used for the cancel uploads link.
    */
-  dictCancelUpload: "Cancel upload",
+  dictCancelUpload: "Cancel uploads",
 
   /**
-   * The text that is displayed if an upload was manually canceled
+   * The text that is displayed if an uploads was manually canceled
    */
   dictUploadCanceled: "Upload canceled.",
 
   /**
-   * If `addRemoveLinks` is true, the text to be used for confirmation when cancelling upload.
+   * If `addRemoveLinks` is true, the text to be used for confirmation when cancelling uploads.
    */
-  dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
+  dictCancelUploadConfirmation: "Are you sure you want to cancel this uploads?",
 
   /**
    * If `addRemoveLinks` is true, the text to be used to remove a file.
@@ -7351,7 +7351,7 @@ var defaultOptions = {
    * Displayed if `maxFiles` is st and exceeded.
    * The string `{{maxFiles}}` will be replaced by the configuration value.
    */
-  dictMaxFilesExceeded: "You can not upload any more files.",
+  dictMaxFilesExceeded: "You can not uploads any more files.",
 
   /**
    * Allows you to translate the different units. Starting with `tb` for terabytes and going down to
@@ -7373,7 +7373,7 @@ var defaultOptions = {
 
   /**
    * Can be an **object** of additional parameters to transfer to the server, **or** a `Function`
-   * that gets invoked with the `files`, `xhr` and, if it's a chunked upload, `chunk` arguments. In case
+   * that gets invoked with the `files`, `xhr` and, if it's a chunked uploads, `chunk` arguments. In case
    * of a function, this needs to return a map.
    *
    * The default implementation does nothing for normal uploads, but adds relevant information for
@@ -7411,7 +7411,7 @@ var defaultOptions = {
    * The callback that will be invoked when all chunks have been uploaded for a file.
    * It gets the file for which the chunks have been uploaded as the first parameter,
    * and the `done` function as second. `done()` needs to be invoked when everything
-   * needed to finish the upload process is done.
+   * needed to finish the uploads process is done.
    */
   chunksUploaded: function chunksUploaded(file, done) {
     done();
@@ -7564,7 +7564,7 @@ var defaultOptions = {
 
   /*
    Those functions register themselves to the events on init and handle all
-   the user interface specific stuff. Overwriting them won't break the upload
+   the user interface specific stuff. Overwriting them won't break the uploads
    but can break the way it's displayed.
    You can overwrite them if you don't like the default behavior. If you just
    want to add an additional event handler, register it on the dropzone object
@@ -7748,7 +7748,7 @@ var defaultOptions = {
     }
   },
   processingmultiple: function processingmultiple() {},
-  // Called whenever the upload progress gets updated.
+  // Called whenever the uploads progress gets updated.
   // Receives `file`, `progress` (percentage 0-100) and `bytesSent`.
   // To get the total number of bytes of the file, use `file.size`
   uploadprogress: function uploadprogress(file, progress, bytesSent) {
@@ -7768,7 +7768,7 @@ var defaultOptions = {
       }
     }
   },
-  // Called whenever the total upload progress gets updated.
+  // Called whenever the total uploads progress gets updated.
   // Called with totalUploadProgress (0-100), totalBytes and totalBytesSent
   totaluploadprogress: function totaluploadprogress() {},
   // Called just before the file is sent. Gets the `xhr` object as second
@@ -7776,7 +7776,7 @@ var defaultOptions = {
   // `formData` object to add additional information.
   sending: function sending() {},
   sendingmultiple: function sendingmultiple() {},
-  // When the complete upload is finished and successful
+  // When the complete uploads is finished and successful
   // Receives `file`
   success: function success(file) {
     if (file.previewElement) {
@@ -7784,12 +7784,12 @@ var defaultOptions = {
     }
   },
   successmultiple: function successmultiple() {},
-  // When the upload is canceled.
+  // When the uploads is canceled.
   canceled: function canceled(file) {
     return this.emit("error", file, this.options.dictUploadCanceled);
   },
   canceledmultiple: function canceledmultiple() {},
-  // When the upload is finished, either with success or an error.
+  // When the uploads is finished, either with success or an error.
   // Receives `file`
   complete: function complete(file) {
     if (file._removeLink) {
@@ -8677,7 +8677,7 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
       file.upload = {
         uuid: Dropzone.uuidv4(),
         progress: 0,
-        // Setting the total upload size to file.size for the beginning
+        // Setting the total uploads size to file.size for the beginning
         // It's actual different than the size to be transmitted.
         total: file.size,
         bytesSent: 0,
@@ -9086,7 +9086,7 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
       }).map(function (file) {
         return file;
       });
-    } // Cancels the file upload and sets the status to CANCELED
+    } // Cancels the file uploads and sets the status to CANCELED
     // **if** the file is actually being uploaded.
     // If it's still in the queue, the file is being removed from it and the status
     // set to CANCELED.
@@ -9187,7 +9187,7 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
           file.upload.chunks = [];
 
           var handleNextChunk = function handleNextChunk() {
-            var chunkIndex = 0; // Find the next item in file.upload.chunks that is not defined yet.
+            var chunkIndex = 0; // Find the next item in file.uploads.chunks that is not defined yet.
 
             while (file.upload.chunks[chunkIndex] !== undefined) {
               chunkIndex++;
@@ -9275,8 +9275,8 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
         }
       }
     } // This function actually uploads the file(s) to the server.
-    // If dataBlocks contains the actual data to upload (meaning, that this could either be transformed
-    // files, or individual chunks for chunked upload).
+    // If dataBlocks contains the actual data to uploads (meaning, that this could either be transformed
+    // files, or individual chunks for chunked uploads).
 
   }, {
     key: "_uploadData",
@@ -9323,7 +9323,7 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
 
       xhr.onerror = function () {
         _this15._handleUploadError(files, xhr);
-      }; // Some browsers do not have the .upload property
+      }; // Some browsers do not have the .uploads property
 
 
       var progressObj = xhr.upload != null ? xhr.upload : xhr;
@@ -9476,7 +9476,7 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
         }
       }
     } // Invoked when there is new progress information about given files.
-    // If e is not provided, it is assumed that the upload is finished.
+    // If e is not provided, it is assumed that the uploads is finished.
 
   }, {
     key: "_updateFilesUploadProgress",
@@ -9493,7 +9493,7 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
             if (file.upload.total && file.upload.bytesSent && file.upload.bytesSent == file.upload.total) {
               // If both, the `total` and `bytesSent` have already been set, and
               // they are equal (meaning progress is at 100%), we can skip this
-              // file, since an upload progress shouldn't go down.
+              // file, since an uploads progress shouldn't go down.
               continue;
             }
 
@@ -9516,9 +9516,9 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
         }
       } else {
         // Handle chunked file uploads
-        // Chunked upload is not compatible with uploading multiple files in one
+        // Chunked uploads is not compatible with uploading multiple files in one
         // request, so we know there's only one file.
-        var _file2 = files[0]; // Since this is a chunked upload, we need to update the appropriate chunk
+        var _file2 = files[0]; // Since this is a chunked uploads, we need to update the appropriate chunk
         // progress.
 
         var chunk = this._getChunk(_file2, xhr);
@@ -9531,7 +9531,7 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
           // No event, so we're at 100%
           chunk.progress = 100;
           chunk.bytesSent = chunk.total;
-        } // Now tally the *file* upload progress from its individual chunks
+        } // Now tally the *file* uploads progress from its individual chunks
 
 
         _file2.upload.progress = 0;
@@ -9744,7 +9744,7 @@ Dropzone.version = "5.9.3"; // This is a map of options for your different dropz
 //
 // And in html:
 //
-//     <form action="/upload" id="my-dropzone-element-id" class="dropzone"></form>
+//     <form action="/uploads" id="my-dropzone-element-id" class="dropzone"></form>
 
 Dropzone.options = {}; // Returns the options for an element or undefined if none available.
 
