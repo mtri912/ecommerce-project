@@ -51,7 +51,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                            @if(isset($categories))
+                            @if($categories->isNotEmpty())
                                 @foreach($categories as $category)
                                     <tr>
                                         <td>{{ $category->id }}</td>
@@ -86,7 +86,6 @@
                                 <tr>
                                     <td colspan="5">Records Not Found</td>
                                 </tr>
-
                             @endif
 
                         </tbody>

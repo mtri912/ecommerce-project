@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index(Request $request) {
         $categories = Category::latest();
 
-        if($request->get('keyword')) {
+        if(!empty($request->get('keyword'))) {
             $categories = $categories->where('name', 'like', '%'.$request->get('keyword').'%');
         }
         $categories = $categories->paginate(10);
