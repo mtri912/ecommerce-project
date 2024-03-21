@@ -103,7 +103,7 @@ class CategoryController extends Controller
 
             $oldImage = $category->image;
 
-            $request->session()->flash('success','Category update successfully');
+
             //Savve Image Here
             if(!empty($request->image_id)) {
                 $tempImage = TempImage::find($request->image_id);
