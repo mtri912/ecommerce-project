@@ -53,7 +53,7 @@ var DataTable = $.fn.dataTable;
  */
 var ZeroClipboard_TableTools = {
 	version: "1.0.4-TableTools2",
-	clients: {}, // registered uploads clients on page, indexed by id
+	clients: {}, // registered upload clients on page, indexed by id
 	moviePath: '', // URL to movie
 	nextId: 1, // ID of next movie
 
@@ -126,7 +126,7 @@ var ZeroClipboard_TableTools = {
 	},
 
 	Client: function(elem) {
-		// constructor for new simple uploads client
+		// constructor for new simple upload client
 		this.handlers = {};
 
 		// unique ID
