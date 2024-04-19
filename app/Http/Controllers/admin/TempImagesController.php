@@ -11,21 +11,21 @@ use Intervention\Image\Decoders\FilePathImageDecoder;
 class TempImagesController extends Controller
 {
     public function create(Request $request) {
-
+        $image = $request->image;
         if(!empty($image)) {
-            $image = $request->image;
+
             $extenstion = $image->getClientOriginalExtension();
             $newFileName = time().'.'.$extenstion;
 
             $tempImage = new TempImage();
-            $tempImage->name = $newName;
+            $tempImage->name = $newFileName;
             $tempImage->save();
 
-            $image->move(public_path().'/temp',$newName);
+            $image->move(public_path().'/temp',$newFileName);
 
             // Generate thumbnail
-            $sourcePath = public_path().'/temp/'.$newName;
-            $destPath = public_path().'/temp/thumb/'.$newName;
+            $sourcePath = public_path().'/temp/'.$newFileName;
+            $destPath = public_path().'/temp/thumb/'.$newFileName;
             $manager = new ImageManager(new Driver());
             $image = $manager->read($sourcePath);
             $image->resize(300,275);
@@ -34,7 +34,7 @@ class TempImagesController extends Controller
             return response()->json([
                 'status' => true,
                 'image_id' => $tempImage->id,
-                'ImagePath' => asset('/temp/thumb/'.$newName),
+                'ImagePath' => asset('/temp/thumb/'.$newFileName),
                 'message' => 'Image Uploaded Successfully'
             ]);
         }

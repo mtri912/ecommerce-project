@@ -36,6 +36,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status;
+            $category->showHome = $request->showHome;
             $category->save();
 
             $request->session()->flash('success','Category added successfully');
@@ -47,7 +48,7 @@ class CategoryController extends Controller
 
                 $newImageName = $category->id.'.'.$ext;
                 $sPath = public_path().'/temp/'.$tempImage->name;
-                $dPath = public_path().'/uploads/category'.$newImageName;
+                $dPath = public_path().'/uploads/category/thumb/'.$newImageName;
                 File::copy($sPath,$dPath);
 
                 $category->image = $newImageName;
@@ -99,10 +100,11 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status;
+            $category->showHome = $request->showHome;
             $category->save();
 
             $oldImage = $category->image;
-
+            $request->session()->flash('success','Category update successfully');
 
             //Savve Image Here
             if(!empty($request->image_id)) {
@@ -112,14 +114,14 @@ class CategoryController extends Controller
 
                 $newImageName = $category->id.'-'.time().'.'.$ext;
                 $sPath = public_path().'/temp/'.$tempImage->name;
-                $dPath = public_path().'/uploads/category'.$newImageName;
+                $dPath = public_path().'/uploads/category/thumb/'.$newImageName;
                 File::copy($sPath,$dPath);
 
                 $category->image = $newImageName;
                 $category->save();
 
                 //Delete Old Images Here
-                File::delete(public_path().'/uploads/category'.$oldImage);
+                File::delete(public_path().'/uploads/category/thumb/'.$oldImage);
             }
 
             return response()->json([
@@ -146,7 +148,7 @@ class CategoryController extends Controller
             ]);
         }
 
-        File::delete(public_path() . '/uploads/category' . $category->image);
+        File::delete(public_path() . '/uploads/category/thumb/' . $category->image);
         $category->delete();
 
         $request->session()->flash('success', 'Category deleted successfully');

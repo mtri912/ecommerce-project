@@ -50,7 +50,7 @@
                                     </div>
                                 </div>@if(!empty($category->image))
                                         <div>
-                                            <img width="250" src="{{ asset('uploads/category'.$category->image) }}" alt="">
+                                            <img width="250" src="{{ asset('uploads/category/thumb/'.$category->image) }}" alt="">
                                         </div>
                                     @endif
                             </div>
@@ -60,6 +60,15 @@
                                     <select type="text" name="status" id="status" class="form-control">
                                         <option {{ ($category->status == 1 ? 'selected' : '') }} value="1">Active</option>
                                         <option {{ ($category->status == 0 ? 'selected' : '') }} value="0">Block</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="status">Show on Home</label>
+                                    <select name="showHome" id="showHome" class="form-control">
+                                        <option {{ ($category->showHome == 'Yes' ? 'selected' : '') }} value="Yes">Yes</option>
+                                        <option {{ ($category->showHome == 'No' ? 'selected' : '') }} value="No">No</option>
                                     </select>
                                 </div>
                             </div>
@@ -162,8 +171,18 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }, success: function (file,response) {
-                $("#image_id").val(response.image_id);
+                // $("#image_id").val(response.image_id);
                 //console.log(response)
+
+                var  html = `<div class="col-md-3" id="image-row-${response.image_id}"> <div class="card">
+                    <input type="hidden" name="image_array[]" value="${response.image_id}">
+                    <img src="${response.ImagePath}" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="btn btn-primary">Delete</a>
+                    </div>
+                </div></div>`;
+
+                $("#product-gallery").append(html);
             }
         });
     </script>

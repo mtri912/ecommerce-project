@@ -75,7 +75,7 @@ class BrandController extends Controller
             $brand->slug = $request->slug;
             $brand->status = $request->status;
             $brand->save();
-            $request->session()->flash('success','Category update successfully');
+            $request->session()->flash('success','Brand update successfully');
             return response()->json([
                 'status' => true,
                 'message' => 'Brand added successfully'
