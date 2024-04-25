@@ -43,8 +43,20 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
+                                            <label for="description">Short Description</label>
+                                            <textarea name="short_description" id="short_description" cols="30" rows="10" class="summernote" placeholder="">{{ $product->short_description }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
                                             <label for="description">Description</label>
                                             <textarea name="description" id="description" cols="30" rows="10" class="summernote" placeholder="Description">{{ $product->description }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="description">Shipping and Returns</label>
+                                            <textarea name="shipping_returns" id="shipping_returns" cols="30" rows="10" class="summernote" placeholder="">{{ $product->shipping_returns }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -131,6 +143,21 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h2 class="h4 mb-3">Realated Product</h2>
+                                    <div class="mb-3">
+                                        <select multiple  class="related_product w-100" name="related_products[]" id="related_products">
+                                            @if(!empty($relatedProducts))
+                                                @foreach($relatedProducts as $relProduct)
+                                                    <option selected value="{{ $relProduct->id }}">{{ $relProduct->title }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <p class="error"></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -190,7 +217,7 @@
                         </div>
                         <div class="card mb-3">
                             <div class="card-body">
-                                <h2 class="h4 mb-3">Featured product</h2>
+                                <h2 class="h4 mb-3">Featured Product</h2>
                                 <div class="mb-3">
                                     <select name="is_featured" id="is_featured" class="form-control">
                                         <option {{ ($product->is_featured == 'No') ? 'selected' : '' }} value="No">No</option>
@@ -200,6 +227,8 @@
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
 
@@ -217,6 +246,20 @@
 
 @section('customJS')
     <script>
+        $('.related_product').select2({
+            ajax: {
+                url: '{{ route("products.getProducts") }}',
+                dataType: 'json',
+                tags: true,
+                multiple: true,
+                minimumInputLength: 3,
+                processResults: function (data) {
+                    return {
+                        results: data.tags
+                    };
+                }
+            }
+        });
         $('#title').change(function (){
             element = $(this);
             $("button[type=submit]").prop('disabled',true);
