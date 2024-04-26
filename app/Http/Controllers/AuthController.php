@@ -56,6 +56,9 @@ class AuthController extends Controller
         if($validator->passes()) {
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password],$request->get('remember'))) {
 
+                if(session()->has('url.intended')) {
+                    return redirect(session()->get('url.intended'));
+                }
                 return redirect()->route('account.profile');
             } else {
 //                session()->flash('error','Either email/password is incorrect.');
