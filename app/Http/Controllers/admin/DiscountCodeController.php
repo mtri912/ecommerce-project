@@ -10,8 +10,15 @@ use Illuminate\Support\Facades\Validator;
 
 class DiscountCodeController extends Controller
 {
-    public function index() {
-        return view('admin.coupon.list');
+    public function index(Request $request) {
+
+        $discountCoupons = DiscountCoupon::latest();
+
+        if(!empty($request->get('keyword'))) {
+            $discountCoupons = $discountCoupons->where('name', 'like', '%'.$request->get('keyword').'%');
+        }
+        $discountCoupons = $discountCoupons->paginate(10);
+        return view('admin.coupon.list',compact('discountCoupons'));
     }
 
     public function create() {
@@ -61,6 +68,7 @@ class DiscountCodeController extends Controller
             $discountCode->description = $request->description;
             $discountCode->max_uses = $request->max_uses;
             $discountCode->max_uses_user = $request->max_uses_user;
+            $discountCode->type = $request->type;
             $discountCode->discount_amount = $request->discount_amount;
             $discountCode->min_amount = $request->min_amount;
             $discountCode->status = $request->status;
