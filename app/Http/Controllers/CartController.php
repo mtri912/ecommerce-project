@@ -162,9 +162,9 @@ class CartController extends Controller
                 $discount = $code->discount_amount;
             }
         }
-
+        $shippingInfo = '';
         // Calculate shipping here
-        if($customerAddress != '') {
+        if($customerAddress != '' && $shippingInfo != null ) {
             $userCountry = $customerAddress->country_id;
             $shippingInfo = ShippingCharge::where('country_id', $userCountry)->first();
 
@@ -237,7 +237,7 @@ class CartController extends Controller
         // step - 3 store data in orders table
         if($request->payment_method == 'cod') {
 
-            $discountCodeId = '';
+            $discountCodeId = NULL;
             $promoCode = '';
             $shipping = 0;
             $discount = 0;
@@ -283,6 +283,8 @@ class CartController extends Controller
             $order->discount = $discount;
             $order->coupon_code_id = $discountCodeId;
             $order->coupon_code = $promoCode;
+            $order->payment_status = 'not paid';
+            $order->status = 'pending';
             $order->user_id = $user->id;
             $order->first_name = $request->first_name;
             $order->last_name = $request->last_name;
@@ -314,6 +316,7 @@ class CartController extends Controller
             Cart::destroy();
 
             session()->forget('code');
+
             return response()->json([
                 'message' => 'Order saved successfully.',
                 'orderId' =>$order->id,
