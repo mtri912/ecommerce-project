@@ -145,6 +145,7 @@ class CartController extends Controller
 
         $customerAddress = CustomerAddress::where('user_id',Auth::user()->id)->first();
 
+
         session()->forget('url.intended');
 
         $countries = Country::orderBy('name','ASC')->get();
@@ -164,22 +165,21 @@ class CartController extends Controller
 
 
         // Calculate shipping here
-        if($customerAddress != '' ) {
+        if($customerAddress != null) {
             $userCountry = $customerAddress->country_id;
             $shippingInfo = ShippingCharge::where('country_id', $userCountry)->first();
 
-            echo  $shippingInfo->amount;
-
-            $totalQty = 0;
             $totalShippingCharge = 0;
             $grandTotal = 0;
-            foreach (Cart::content() as $item) {
-                $totalQty += $item->qty;
+
+            if($shippingInfo != null) {
+                $totalShippingCharge = $shippingInfo->amount;
+                $grandTotal = ($subTotal-$discount)+$totalShippingCharge;
+            } else {
+                $shippingInfo = ShippingCharge::where('country_id','rest_of_world')->first();
+                $totalShippingCharge = $shippingInfo->amount;
+                $grandTotal = ($subTotal-$discount)+$totalShippingCharge;
             }
-
-            $totalShippingCharge = $totalQty*$shippingInfo->amount;
-            $grandTotal = ($subTotal-$discount)+$totalShippingCharge;
-
         } else {
             $grandTotal = ($subTotal-$discount);
             $totalShippingCharge = 0;
@@ -363,14 +363,9 @@ class CartController extends Controller
 
             $shippingInfo = ShippingCharge::where('country_id',$request->country_id)->first();
 
-            $totalQty = 0;
-            foreach (Cart::content() as $item) {
-                $totalQty += $item->qty;
-            }
-
             if($shippingInfo != null) {
 
-                $shippingCharge = $totalQty*$shippingInfo->amount;
+                $shippingCharge = $shippingInfo->amount;
                 $grandTotal = ($subTotal-$discount)+$shippingCharge;
 
 
@@ -384,7 +379,7 @@ class CartController extends Controller
             } else {
                 $shippingInfo = ShippingCharge::where('country_id','rest_of_world')->first();
 
-                $shippingCharge = $totalQty*$shippingInfo->amount;
+                $shippingCharge = $shippingInfo->amount;
                 $grandTotal = ($subTotal-$discount)+$shippingCharge;
 
                 return response()->json([
