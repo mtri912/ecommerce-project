@@ -145,7 +145,6 @@ class CartController extends Controller
 
         $customerAddress = CustomerAddress::where('user_id',Auth::user()->id)->first();
 
-
         session()->forget('url.intended');
 
         $countries = Country::orderBy('name','ASC')->get();
@@ -162,11 +161,14 @@ class CartController extends Controller
                 $discount = $code->discount_amount;
             }
         }
-        $shippingInfo = '';
+
+
         // Calculate shipping here
-        if($customerAddress != '' && $shippingInfo != null ) {
+        if($customerAddress != '' ) {
             $userCountry = $customerAddress->country_id;
             $shippingInfo = ShippingCharge::where('country_id', $userCountry)->first();
+
+            echo  $shippingInfo->amount;
 
             $totalQty = 0;
             $totalShippingCharge = 0;
@@ -176,7 +178,6 @@ class CartController extends Controller
             }
 
             $totalShippingCharge = $totalQty*$shippingInfo->amount;
-
             $grandTotal = ($subTotal-$discount)+$totalShippingCharge;
 
         } else {
