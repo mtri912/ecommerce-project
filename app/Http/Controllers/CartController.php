@@ -489,4 +489,6 @@ class CartController extends Controller
         session()->forget('code');
         return $this->getOrderSummery($request);
     }
+
+
 }
