@@ -54,14 +54,11 @@ class CategoryController extends Controller
                 $category->image = $newImageName;
                 $category->save();
             }
-//            return redirect()->route('categories.index')->with('success', 'Category added successfully');
             return response()->json([
                'status' => true,
                'message' => 'Category added successfully'
             ]);
         } else {
-//            return redirect()->route('categories.create')
-//                ->withErrors($validator);
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()

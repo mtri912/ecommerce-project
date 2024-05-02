@@ -47,9 +47,12 @@ class ShopController extends Controller
 
         }
 
+        if(!empty($request->get('search'))) {
+            $products = $products->where('title','like','%'.$request->get('search').'%');
+        }
 
-        $products = $products->orderBy('id','DESC');
-        if($request->get('sort')) {
+
+        if($request->get('sort') != '') {
             if($request->get('sort') == 'latest') {
                 $products = $products->orderBy('id','DESC');
             } elseif ($request->get('sort') == 'price_asc') {
