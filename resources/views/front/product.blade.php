@@ -15,7 +15,7 @@
 
     <section class="section-7 pt-3 mb-3">
         <div class="container">
-            <div class="row ">
+            <div class="row">
                 <div class="col-md-5">
                     <div id="product-carousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner bg-light">
@@ -60,7 +60,8 @@
                         {!! $product->short_description !!}
 {{--                        <a href="javascript:void(0);" onclick="addToCart({{ $product->id }});" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART</a>--}}
 
-                        @if($product->track_qty == 'Yes')
+                    <form class="form-colo"
+                    @if($product->track_qty == 'Yes')
                             @if($product->qty > 0)
                                 <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $product->id }});">
                                     <i class="fa fa-shopping-cart"></i> &nbsp;Add To Cart
@@ -76,6 +77,7 @@
                             </a>
                         @endif
                     </div>
+
                 </div>
 
                 <div class="col-md-12 mt-5">
@@ -108,6 +110,8 @@
                 </div>
             </div>
         </div>
+
+
     </section>
 
     @if(!empty($relatedProducts))
@@ -168,6 +172,7 @@
         </div>
     </section>
     @endif
+
 
 @endsection
 

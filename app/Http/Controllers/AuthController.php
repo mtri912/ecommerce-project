@@ -145,6 +145,7 @@ class AuthController extends Controller
 
             CustomerAddress::updateOrCreate(
                 ['user_id' => $userID],
+
                 [
                     'user_id' => $userID,
                     'first_name' => $request->first_name,
