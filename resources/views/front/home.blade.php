@@ -16,8 +16,8 @@
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3">
                             <h1 class="display-4 text-white mb-3">Kids Fashion</h1>
-                            <p class="mx-md-5 px-5">Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam</p>
-                            <a class="btn btn-outline-light py-2 px-4 mt-3" href="#">Shop Now</a>
+                            <p class="mx-md-5 px-5">Explore a unique and colorful world of kids' fashion! From casual streetwear to formal attire, we offer everything you need to keep your little one stylish and comfortable.</p>
+                            <a class="btn btn-outline-light py-2 px-4 mt-3" href="{{ route('front.shop') }}">Shop Now</a>
                         </div>
                     </div>
                 </div>
@@ -32,8 +32,8 @@
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3">
                             <h1 class="display-4 text-white mb-3">Womens Fashion</h1>
-                            <p class="mx-md-5 px-5">Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam</p>
-                            <a class="btn btn-outline-light py-2 px-4 mt-3" href="#">Shop Now</a>
+                            <p class="mx-md-5 px-5">Discover trends that blend classic elegance with modern flair, and find your perfect outfit for any occasion. </p>
+                            <a class="btn btn-outline-light py-2 px-4 mt-3" href="{{ route('front.shop') }}">Shop Now</a>
                         </div>
                     </div>
                 </div>
@@ -49,8 +49,8 @@
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3">
                             <h1 class="display-4 text-white mb-3">Shop Online at Flat 70% off on Branded Clothes</h1>
-                            <p class="mx-md-5 px-5">Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam</p>
-                            <a class="btn btn-outline-light py-2 px-4 mt-3" href="#">Shop Now</a>
+                            <p class="mx-md-5 px-5">Unmissable deals on designer brands! Shop now and enjoy a flat 70% discount on all our branded collections. </p>
+                            <a class="btn btn-outline-light py-2 px-4 mt-3" href="{{ route('front.shop') }}">Shop Now</a>
                         </div>
                     </div>
                 </div>
