@@ -58,9 +58,9 @@
                         <h2 class="price ">${{ $product->price }}</h2>
 
                         {!! $product->short_description !!}
-{{--                        <a href="javascript:void(0);" onclick="addToCart({{ $product->id }});" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART</a>--}}
 
-                    <form class="form-colo"
+
+
                     @if($product->track_qty == 'Yes')
                             @if($product->qty > 0)
                                 <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $product->id }});">
