@@ -71,6 +71,9 @@ Route::group(['prefix' => 'account'], function (){
         Route::get('/profile',[AuthController::class,'profile'])->name('account.profile');
         Route::post('/update-profile',[AuthController::class,'updateProfile'])->name('account.updateProfile');
         Route::post('/update-address',[AuthController::class,'updateAddress'])->name('account.updateAddress');
+        Route::get('/change-password',[AuthController::class,'showChangePasswordForm'])->name('account.changePassword');
+        Route::post('/process-change-password',[AuthController::class,'changePassword'])->name('account.processChangePassword');
+
         Route::get('/my-orders',[AuthController::class,'orders'])->name('account.orders');
         Route::get('/my-wishlist',[AuthController::class,'wishlist'])->name('account.wishlist');
         Route::post('/remove-product-from-wishlist',[AuthController::class,'removeProductFromWishList'])->name('account.removeProductFromWishList');
@@ -157,6 +160,7 @@ Route::group(['prefix' => 'admin'], function (){
         Route::get('/users/{user}/edit',[UserController::class,'edit'])->name('users.edit');
         Route::put('/users/{user}',[UserController::class,'update'])->name('users.update');
         Route::delete('/users/{user}',[UserController::class,'destroy'])->name('users.delete');
+
         //temp-images.create
         Route::post('/uploads-temp-image',[TempImagesController::class,'create'])->name('temp-images.create');
 
