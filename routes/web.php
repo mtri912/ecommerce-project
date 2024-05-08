@@ -39,9 +39,7 @@ use Illuminate\Support\Str;
 //    return view('welcome');
 //});
 
-//Route::get('/test', function () {
-//    orderEmail(23);
-//});
+
 
 Route::get('/',[FrontController::class,'index'])->name('front.home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('front.shop');
@@ -87,6 +85,7 @@ Route::group(['prefix' => 'account'], function (){
         Route::post('/remove-product-from-wishlist',[AuthController::class,'removeProductFromWishList'])->name('account.removeProductFromWishList');
         Route::get('/order-detail/{orderId}',[AuthController::class,'orderDetail'])->name('account.orderDetail');
         Route::get('/logout',[AuthController::class,'logout'])->name('account.logout');
+
     });
 });
 
@@ -134,6 +133,8 @@ Route::group(['prefix' => 'admin'], function (){
         Route::put('/products/{product}',[ProductController::class,'update'])->name('products.update');
         Route::delete('/products/{product}',[ProductController::class,'destroy'])->name('products.delete');
         Route::get('/get-products',[ProductController::class,'getProducts'])->name('products.getProducts');
+        Route::get('/ratings',[ProductController::class,'productRatings'])->name('products.productRatings');
+        Route::get('/change-rating-status',[ProductController::class,'changeRatingStatus'])->name('products.changeRatingStatus');
 
         Route::get('/products-subcategories',[ProductSubCategoryController::class,'index'])->name('products-subcategories.index');
 

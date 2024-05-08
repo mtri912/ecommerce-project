@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\Wishlist;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -179,6 +180,7 @@ class AuthController extends Controller
     }
     public function logout() {
         Auth::logout();
+        Cart::destroy();
         return redirect()->route('account.login')
             ->with('success','You successfully logged out!');
     }
