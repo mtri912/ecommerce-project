@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductRating;
+use App\Models\ProductsAttribute;
 use App\Models\SubCategory;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
@@ -19,13 +20,24 @@ use Intervention\Image\ImageManager;
 class ProductController extends Controller
 {
     public function index(Request $request) {
-        $products = Product::latest('id')->with('product_images');
-
+        $products = Product::latest('id')->with('product_images','attributes','category','subCategory','brand');
+//        dd($products);
         if($request->get('keyword') != "") {
             $products = $products->where('title','like','%'.$request->keyword.'%');
         }
+
         $data['products'] = $products->paginate();
         return view('admin.products.list',$data);
+    }
+    public function inventory($id,Request $request) {
+        $products = Product::latest('id')->with('product_images','attributes');
+//        dd($products);
+        if($request->get('keyword') != "") {
+            $products = $products->where('title','like','%'.$request->keyword.'%');
+        }
+
+        $data['products'] = $products->paginate();
+        return view('admin.products.inventory',$data);
     }
     public function create() {
         $data = [];
@@ -41,30 +53,40 @@ class ProductController extends Controller
         $rules = [
             'title' => 'required',
             'slug' => 'required|unique:products',
-            'price' => 'required|numeric',
-            'sku' => 'required|unique:products',
-            'track_qty' => 'required|in:Yes,No',
+            'product_color' => 'required',
+            'family_color' => 'required',
+//            'price' => 'required|numeric',
+//            'sku' => 'required|unique:products',
+//            'track_qty' => 'required|in:Yes,No',
             'category' => 'required',
             'is_featured' => 'required|in:Yes,No',
         ];
 
-        if(!empty($request->track_qty && $request->track_qty == "Yes")) {
-            $rules['qty'] = 'required|numeric';
-        }
+//        if(!empty($request->track_qty && $request->track_qty == "Yes")) {
+//            $rules['qty'] = 'required|numeric';
+//        }
 
         $validator = Validator::make($request->all(),$rules);
+
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+//        echo "<pre>"; print_r($data); die;
+        }
+
 
         if($validator->passes()) {
             $product = new Product;
             $product->title = $request->title;
             $product->slug = $request->slug;
             $product->description = $request->description;
-            $product->price = $request->price;
+            $product->product_color = $request->product_color;
+            $product->family_color = $request->family_color;
+            $product->product_price = $request->product_price;
             $product->compare_price = $request->compare_price;
-            $product->sku = $request->sku;
-            $product->barcode = $request->barcode;
-            $product->track_qty = $request->track_qty;
-            $product->qty = $request->qty;
+//            $product->sku = $request->sku;
+//            $product->barcode = $request->barcode;
+//            $product->track_qty = $request->track_qty;
+//            $product->qty = $request->qty;
             $product->status = $request->status;
             $product->category_id = $request->category;
             $product->sub_category_id = $request->sub_category;
@@ -112,6 +134,34 @@ class ProductController extends Controller
                     $image->save($destPath);
                 }
             }
+
+            foreach ($data['sku'] as $key => $value) {
+                if (!empty($value)) {
+                    // SKU already exists check
+                    $countSKU = ProductsAttribute::where('sku',$value)->count();
+                    if ($countSKU > 0) {
+                        $message = "SKU already exists. Please add another SKU";
+                        session()->flash('error',$message);
+                        return redirect()->back()->with('success',$message);
+                    }
+                    // Size already exists check
+                    $countSize = ProductsAttribute::where(['product_id'=>$product->id,'size'=>$data['size'][$key]])->count();
+                    if ($countSize > 0) {
+                        $message= "Size already exists. Please add another Size";
+                        return redirect()->back()->with('success',$message);
+                    }
+
+                    $attribute = new ProductsAttribute();
+                    $attribute->product_id = $product->id;
+                    $attribute->sku = $value;
+                    $attribute->size = $data['size'][$key];
+                    $attribute->price = $data['price'][$key];
+                    $attribute->stock = $data['stock'][$key];
+                    $attribute->status = 1;
+                    $attribute->save();
+                }
+            }
+
 
             $request->session()->flash('success','Product added successfully');
             return response()->json([
@@ -162,16 +212,22 @@ class ProductController extends Controller
         $rules = [
             'title' => 'required',
             'slug' => 'required|unique:products,slug,'.$product->id.',id',
-            'price' => 'required|numeric',
-            'sku' => 'required|unique:products,sku,'.$product->id.',id',
-            'track_qty' => 'required|in:Yes,No',
+//            'price' => 'required|numeric',
+            'product_color' => 'required',
+            'family_color' => 'required',
+//            'sku' => 'required|unique:products,sku,'.$product->id.',id',
+//            'track_qty' => 'required|in:Yes,No',
             'category' => 'required',
             'is_featured' => 'required|in:Yes,No',
         ];
 
-        if(!empty($request->track_qty && $request->track_qty == "Yes")) {
-            $rules['qty'] = 'required|numeric';
-        }
+//        if(!empty($request->track_qty && $request->track_qty == "Yes")) {
+//            $rules['qty'] = 'required|numeric';
+//        }
+
+            $data = $request->all();
+//        echo "<pre>"; print_r($data); die;
+
 
         $validator = Validator::make($request->all(),$rules);
 
@@ -180,12 +236,14 @@ class ProductController extends Controller
             $product->title = $request->title;
             $product->slug = $request->slug;
             $product->description = $request->description;
-            $product->price = $request->price;
+            $product->product_color = $request->product_color;
+            $product->family_color = $request->family_color;
+            $product->product_price = $request->product_price;
             $product->compare_price = $request->compare_price;
-            $product->sku = $request->sku;
-            $product->barcode = $request->barcode;
-            $product->track_qty = $request->track_qty;
-            $product->qty = $request->qty;
+//            $product->sku = $request->sku;
+//            $product->barcode = $request->barcode;
+//            $product->track_qty = $request->track_qty;
+//            $product->qty = $request->qty;
             $product->status = $request->status;
             $product->category_id = $request->category;
             $product->sub_category_id = $request->sub_category;
@@ -196,7 +254,48 @@ class ProductController extends Controller
             $product->related_products = (!empty($request->related_products)) ? implode(',',$request->related_products) : '';
             $product->save();
 
-            // Save Gallery Pics
+
+            foreach ($data['sku'] as $key => $value) {
+                if (!empty($value)) {
+                    // SKU already exists check
+                    $countSKU = ProductsAttribute::where('sku',$value)->count();
+                    if ($countSKU > 0) {
+                        $message = "SKU already exists. Please add another SKU";
+                        session()->flash('error',$message);
+                        return response()->json([
+                            'status' => false,
+                            'message' => $message
+                        ]);
+                    }
+                    // Size already exists check
+                    $countSize = ProductsAttribute::where(['product_id'=>$product->id,'size'=>$data['size'][$key]])->count();
+                    if ($countSize > 0) {
+                        $message= "Size already exists. Please add another Size";
+                        session()->flash('error',$message);
+                        return response()->json([
+                            'status' => false,
+                            'message' => $message
+                        ]);
+                    }
+
+                    $attribute = new ProductsAttribute();
+                    $attribute->product_id = $product->id;
+                    $attribute->sku = $value;
+                    $attribute->size = $data['size'][$key];
+                    $attribute->price = $data['price'][$key];
+                    $attribute->stock = $data['stock'][$key];
+                    $attribute->status = 1;
+                    $attribute->save();
+                }
+            }
+
+            foreach ($data['attributeId'] as $akey => $attribute) {
+                if (!empty($attribute)) {
+                    ProductsAttribute::where(['id'=>$data['attributeId'][$akey]])->update(['price'=>$data['price'][$akey],'stock'=>$data['stock'][$akey]]);
+                }
+            }
+
+
             $request->session()->flash('success','Product updated successfully');
             return response()->json([
                 'status' => true,
@@ -281,6 +380,31 @@ class ProductController extends Controller
 
         return response()->json([
            'status' => true,
+        ]);
+    }
+
+    public function changeAttributeStatus(Request $request) {
+
+        $productAttribute = ProductsAttribute::find($request->id);
+        $productAttribute->status = $request->status;
+        $productAttribute->save();
+
+        session()->flash('success','Status changed successfully.');
+
+        return response()->json([
+            'status' => true,
+        ]);
+    }
+
+
+    public function deleteAttribute($id) {
+        $att = ProductsAttribute::find($id);
+        $att->delete();
+
+        session()->flash('success','Attribute deleted successfully.');
+
+        return response()->json([
+            'status' => true,
         ]);
     }
 }

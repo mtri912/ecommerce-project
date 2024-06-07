@@ -34,6 +34,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend-assets/css/slick.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend-assets/css/slick-theme.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend-assets/css/style.css') }}" />
+{{--    <link rel="stylesheet" type="text/css" href="{{ asset('frontend-assets/css/app.css') }}" />--}}
+{{--    <link rel="stylesheet" type="text/css" href="{{ asset('frontend-assets/css/utility.css') }}" />--}}
     <link rel="stylesheet" type="text/css" href="{{ asset('frontend-assets/css/ion.rangeSlider.min.css') }}" />
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -139,11 +141,16 @@
                 <div class="footer-card">
                     <h3>Important Links</h3>
                     <ul>
-                        <li><a href="about-us.php" title="About">About</a></li>
-                        <li><a href="contact-us.php" title="Contact Us">Contact Us</a></li>
-                        <li><a href="#" title="Privacy">Privacy</a></li>
-                        <li><a href="#" title="Privacy">Terms & Conditions</a></li>
-                        <li><a href="#" title="Privacy">Refund Policy</a></li>
+                        @if(staticPages()->isNotEmpty())
+                            @foreach(staticPages() as $page)
+                                <li><a href="{{ route('front.page',$page->slug) }}" title="{{ $page->name }}">{{ $page->name }}</a></li>
+                            @endforeach
+                        @endif
+{{--                        <li><a href="about-us.php" title="About">About</a></li>--}}
+{{--                        <li><a href="contact-us.php" title="Contact Us">Contact Us</a></li>--}}
+{{--                        <li><a href="#" title="Privacy">Privacy</a></li>--}}
+{{--                        <li><a href="#" title="Privacy">Terms & Conditions</a></li>--}}
+{{--                        <li><a href="#" title="Privacy">Refund Policy</a></li>--}}
                     </ul>
                 </div>
             </div>
@@ -217,23 +224,48 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    {{--function addToCart(id) {--}}
+    {{--    $.ajax({--}}
+    {{--        url: '{{ route("front.addToCart") }}',--}}
+    {{--        type: 'post',--}}
+    {{--        data: {id:id},--}}
+    {{--        dataType: 'json',--}}
+    {{--        headers: {--}}
+    {{--            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
+    {{--        }, success: function (response) {--}}
+    {{--            if(response.status === true) {--}}
+    {{--                window.location.href = "{{ route("front.cart") }}";--}}
+    {{--            } else {--}}
+    {{--                alert(response.message);--}}
+    {{--            }--}}
+    {{--        }--}}
+    {{--    });--}}
+    {{--}--}}
+
     function addToCart(id) {
+        var selectedSize = $('input[name="size"]:checked').val(); // Giả sử bạn có radio buttons cho kích thước
+
         $.ajax({
-            url: '{{ route("front.addToCart") }}',
+            url: '<?php echo e(route("front.addToCart")); ?>',
             type: 'post',
-            data: {id:id},
+            data: {
+                id: id,
+                size: selectedSize
+            },
             dataType: 'json',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }, success: function (response) {
+            },
+            success: function (response) {
                 if(response.status === true) {
-                    window.location.href = "{{ route("front.cart") }}";
+                    window.location.href = "<?php echo e(route("front.cart")); ?>";
                 } else {
                     alert(response.message);
                 }
             }
         });
     }
+
 
     function addToWishList(id) {
         $.ajax({

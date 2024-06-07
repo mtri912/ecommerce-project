@@ -42,9 +42,9 @@ class ShopController extends Controller
 
         if($request->get('price_max') != '' && $request->get('price_min') != '') {
             if($request->get('price_max') == 1000) {
-                $products = $products->whereBetween('price',[intval($request->get('price_min')),1000000]);
+                $products = $products->whereBetween('product_price',[intval($request->get('price_min')),1000000]);
             } else {
-                $products = $products->whereBetween('price',[intval($request->get('price_min')),intval($request->get('price_max'))]);
+                $products = $products->whereBetween('product_price',[intval($request->get('price_min')),intval($request->get('price_max'))]);
             }
 
         }
@@ -58,9 +58,9 @@ class ShopController extends Controller
             if($request->get('sort') == 'latest') {
                 $products = $products->orderBy('id','DESC');
             } elseif ($request->get('sort') == 'price_asc') {
-                $products = $products->orderBy('price','ASC');
+                $products = $products->orderBy('product_price','ASC');
             } else {
-                $products = $products->orderBy('price','DESC');
+                $products = $products->orderBy('product_price','DESC');
             }
         } else {
             $products = $products->orderBy('id','DESC');
@@ -85,9 +85,14 @@ class ShopController extends Controller
         $product = Product::where('slug',$slug)
                     ->withCount('product_ratings')
                     ->withSum('product_ratings','rating')
-                    ->with('product_images','product_ratings')->first();
-
-
+                    ->with('product_images','product_ratings','attributes')->first();
+        $productColor = array();
+        $productColor = Product::select('id', 'family_color')
+            ->where('id', $product->id)
+            ->where('status', 1)
+            ->get()
+            ->toArray();
+//        dd($product);
         if($product == null) {
             abort('404');
         }
@@ -101,6 +106,7 @@ class ShopController extends Controller
 
         $data['product'] = $product;
         $data['relatedProducts'] = $relatedProducts;
+        $data['productColor'] = $productColor;
 
         // Rating Calculation
         $avgRating = '0.00';
@@ -113,6 +119,17 @@ class ShopController extends Controller
         $data['avgRating'] = $avgRating;
         $data['avgRatingPer'] = $avgRatingPer;
         return view('front.product',$data);
+    }
+
+    public function getAttributePrice(Request $request) {
+        if($request->ajax()) {
+            $data = $request->all();
+//            echo "<pre>"; print_r($data); die;
+            $getAttributePrice = Product::getAttributePrice($data['product_id'],$data['size']);
+
+
+            return $getAttributePrice;
+        }
     }
 
     public function saveRating($id, Request $request) {

@@ -21,7 +21,8 @@
                 <div class="col-md-9">
                     <div class="card">
                         <div class="card-header">
-                            <h2 class="h5 mb-0 pt-2 pb-2">Order: {{ $order->id }}</h2>
+                            <h2  id="order-{{ $order->id }}"  class="h5 mb-0 pt-2 pb-2">Order: {{ $order->id }}</h2>
+
                         </div>
 
                         <div class="card-body pb-0">
@@ -29,7 +30,7 @@
                             <div class="card card-sm">
                                 <div class="card-body bg-light mb-3">
                                     <div class="row">
-                                        <div class="col-6 col-lg-3">
+                                        <div class="col-6 col-lg-2">
                                             <!-- Heading -->
                                             <h6 class="heading-xxxs text-muted">Order No:</h6>
                                             <!-- Text -->
@@ -37,7 +38,7 @@
                                                 {{ $order->id }}
                                             </p>
                                         </div>
-                                        <div class="col-6 col-lg-3">
+                                        <div class="col-6 col-lg-2">
                                             <!-- Heading -->
                                             <h6 class="heading-xxxs text-muted">Shipped date:</h6>
                                             <!-- Text -->
@@ -51,7 +52,7 @@
                                                 </time>
                                             </p>
                                         </div>
-                                        <div class="col-6 col-lg-3">
+                                        <div class="col-6 col-lg-2">
                                             <!-- Heading -->
                                             <h6 class="heading-xxxs text-muted">Status:</h6>
                                             <!-- Text -->
@@ -67,7 +68,7 @@
                                                 @endif
                                             </p>
                                         </div>
-                                        <div class="col-6 col-lg-3">
+                                        <div class="col-6 col-lg-2">
                                             <!-- Heading -->
                                             <h6 class="heading-xxxs text-muted">Order Amount:</h6>
                                             <!-- Text -->
@@ -75,6 +76,40 @@
                                                  {{ number_format($order->grand_total,2) }}
                                             </p>
                                         </div>
+{{--                                        <div class="col-6 col-lg-3">--}}
+{{--                                            <button id="cancelOrderButton" class="btn btn-danger">Cancel Order</button>--}}
+{{--                                        </div>--}}
+                                        <!-- Button Cancel Order -->
+                                        <div class="col-6 col-lg-3">
+                                            <button id="cancelOrderButton" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">Cancel Order</button>
+                                        </div>
+                                        <!-- Modal Cancel Order -->
+                                        <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form id="cancelOrderForm">
+                                                        @csrf
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to cancel this order?</p>
+                                                            <div class="mb-3">
+                                                                <label for="feedback" class="form-label">Feedback</label>
+                                                                <textarea class="form-control" id="feedback" name="feedback" rows="3" required></textarea>
+                                                            </div>
+                                                            <input type="hidden" id="orderId" name="order_id" value="{{ $order->id }}">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -84,6 +119,7 @@
 
                             <!-- Heading -->
                             <h6 class="mb-7 h5 mt-4">Order Items ({{ $orderItemsCount }})</h6>
+
 
                             <!-- Divider -->
                             <hr class="my-3">
@@ -108,7 +144,8 @@
                                             <div class="col">
                                                 <!-- Title -->
                                                 <p class="mb-4 fs-sm fw-bold">
-                                                    <a class="text-body" href="product.html">{{ $item->name }} x {{ $item->qty }}</a> <br>
+                                                    <a class="text-body" href="#">{{ $item->name }} x {{ $item->qty }}</a> <br>
+                                                    <span class="text-body">Size: {{ $item->size }}</span> <br>
                                                     <span class="text-muted">${{ $item->total }}</span>
                                                 </p>
                                             </div>
@@ -149,4 +186,44 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('customJS')
+    <script>
+        $(document).ready(function() {
+            $('#cancelOrderForm').on('submit', function(e) {
+                e.preventDefault();
+
+                var orderId = $('#orderId').val();
+                var feedback = $('#feedback').val();
+                var token = $('input[name="_token"]').val();
+
+                $.ajax({
+                    url: '{{ route("order.cancel") }}',
+                    type: 'POST',
+                    data: {
+                        _token: token,
+                        order_id: orderId,
+                        feedback: feedback
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            alert(response.message);
+                            // Xóa đơn hàng khỏi giao diện người dùng
+                            $('#order-' + orderId).remove();
+                            $('#cancelOrderModal').modal('hide');
+                            window.location.href= "{{ route("account.orders") }}"
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Error cancelling order');
+                    }
+                });
+            });
+        });
+    </script>
+
+
 @endsection

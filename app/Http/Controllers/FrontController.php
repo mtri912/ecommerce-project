@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactMail;
+use App\Models\Page;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
@@ -64,5 +69,50 @@ class FrontController extends Controller
             'status' => true,
             'message' => '<div class="alert alert-success"><strong>"'.$product->title.'"</strong> added in your wishlist</div>'
         ]);
+    }
+
+    public function page($slug) {
+        $page = Page::where('slug',$slug)->first();
+        if($page == null) {
+            abort(404);
+        }
+//        dd($page);
+        return view('front.page',[
+            'page' => $page
+        ]);
+    }
+
+    public function sendContactEmail(Request $request) {
+        $validator = Validator::make($request->all(),[
+           'name' => 'required',
+           'email' => 'required',
+            'subject' => 'required|min:10',
+        ]);
+
+        if($validator->passes()) {
+            //send email here
+
+            $mailData = [
+              'name' => $request->name,
+              'email' => $request->email,
+              'subject' => $request->subject,
+              'message' => $request->message,
+                'mail_subject' => 'You have received a contact email.'
+            ];
+
+            $admin = User::where('id',1)->first();
+
+            Mail::to($admin->email)->send(new ContactMail($mailData));
+
+            session()->flash('success','Thanks for contacting us, we will get back to you soon.');
+            return response()->json([
+               'status' => true,
+            ]);
+        } else {
+            return response()->json([
+               'status' => false,
+               'errors' => $validator->errors()
+            ]);
+        }
     }
 }

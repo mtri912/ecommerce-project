@@ -16,4 +16,30 @@ class Product extends Model
         return $this->hasMany(ProductRating::class)->where('status',1);
     }
 
+    public function attributes() {
+        return $this->hasMany(ProductsAttribute::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+    public static function getAttributePrice($product_id,$size) {
+        $attributePrice = ProductsAttribute::where(['product_id'=>$product_id,'size'=>$size])->first()->toArray();
+
+        $final_price = $attributePrice['price'];
+
+        return array('product_price'=>$attributePrice['price'],'final_price'=>$final_price);
+    }
+
 }

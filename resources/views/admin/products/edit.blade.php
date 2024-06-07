@@ -22,6 +22,7 @@
         <form action="" method="post" name="productForm" id="productForm">
             @csrf
             <div class="container-fluid">
+                @include('admin.message')
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card mb-3">
@@ -94,7 +95,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="price">Price</label>
-                                            <input type="text" name="price" id="price" class="form-control" placeholder="Price" value="{{ $product->price }}">
+                                            <input type="text" name="product_price" id="product_price" class="form-control" placeholder="Price" value="{{ $product->product_price }}">
                                             <p class="error"></p>
                                         </div>
                                     </div>
@@ -112,40 +113,116 @@
                         </div>
                         <div class="card mb-3">
                             <div class="card-body">
-                                <h2 class="h4 mb-3">Inventory</h2>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="sku">SKU (Stock Keeping Unit)</label>
-                                            <input type="text" name="sku" id="sku" class="form-control" placeholder="sku" value="{{ $product->sku }}">
-                                            <p class="error"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="barcode">Barcode</label>
-                                            <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Barcode" value="{{ $product->barcode }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="hidden" name="track_qty" value="No">
-                                                <input class="custom-control-input" type="checkbox" id="track_qty" value="Yes" name="track_qty" {{ ($product->track_qty == 'Yes') ? 'checked' : ''}}>
-                                                <label for="track_qty" class="custom-control-label">Track Quantity</label>
-                                                <p class="error"></p>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="number" min="0" name="qty" id="qty" class="form-control" placeholder="Qty" value="{{ $product->qty }}">
-                                            <p class="error"></p>
-                                        </div>
+                                <h2 class="h4 mb-3">Added Attributes</h2>
+                                <table style="background-color: #99ccff; width: 50%;" cellpadding="5">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Size</th>
+                                        <th>SKU</th>
+                                        <th>Price</th>
+                                        <th>Stock</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    @foreach($product->attributes as $attribute)
+                                        <input type="hidden" name="attributeId[]" value="{{ $attribute->id }}">
+                                        <tr>
+                                            <td>{{ $attribute->id }}</td>
+                                            <td>{{ $attribute->size }}</td>
+                                            <td>{{ $attribute->sku }}</td>
+                                            <td>
+                                                <input style="width: 70px;" type="number" name="price[]" value="{{ $attribute->price }}" >
+                                            </td>
+                                            <td>
+                                                <input style="width: 70px;" type="number" name="stock[]" value="{{ $attribute->stock }}" >
+                                            </td>
+{{--                                            <td>--}}
+{{--                                                @if($attribute->status == 1)--}}
+{{--                                                    <a class="updateAttributeStatus" id="attribute-{{ $attribute->id }}" attribute_id="{{ $attribute->id }}" style="color:#3f6ed3" href="javascript:void(0)">--}}
+{{--                                                        <i class="fas fa-toogle-on" status="Active"></i>--}}
+{{--                                                    </a>--}}
+{{--                                                @else--}}
+{{--                                                    <a class="updateAttributeStatus" id="attribute-{{ $attribute->id }}" attribute_id="{{ $attribute->id }}" style="color:grey" href="javascript:void(0)">--}}
+{{--                                                        <i class="fas fa-toogle-off" status="Inactive"></i>--}}
+{{--                                                    </a>--}}
+{{--                                                @endif--}}
+{{--                                                &nbsp;&nbsp;--}}
+{{--                                                <a style="color: #3f6ed3" class="confirmDelete" title="Delete Attribute" href="javascript:void(0)" record="attribute" recordid="{{ $attribute->id }}"?>--}}
+{{--                                                    <i class="fas fa-trash"></i>--}}
+{{--                                                </a>--}}
+{{--                                            </td>--}}
+                                            <td>
+                                                @if($attribute->status == 1)
+                                                    <a href="javascript:void(0);" style="color:#3f6ed3" onclick="changeAttributeStatus(0,'{{ $attribute->id }}');">
+{{--                                                    <a class="updateAttributeStatus" id="attribute-{{ $attribute['id'] }}" attribute_id="{{ $attribute['id'] }}" style="color:#3f6ed3" href="javascript:void(0)">--}}
+                                                        <i class="fas fa-toggle-on" status="Active"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="javascript:void(0);" style="color:grey" onclick="changeAttributeStatus(1,'{{ $attribute->id }}');">
+{{--                                                    <a class="updateAttributeStatus" id="attribute-{{ $attribute['id'] }}" attribute_id="{{ $attribute['id'] }}" style="color:grey" href="javascript:void(0)">--}}
+                                                        <i class="fas fa-toggle-off" status="Inactive"></i>
+                                                    </a>
+                                                @endif
+                                                &nbsp;&nbsp;
+                                                <a style="color: #3f6ed3" class="confirmDelete" title="Delete Attribute" href="javascript:void(0);" onclick="deleteAttribute({{ $attribute->id }})"  ">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h2 class="h4 mb-3">Add Attributes</h2>
+                                <div class="field_wrapper">
+                                    <div>
+                                        <input type="text" name="size[]" id="size" placeholder="Size" style="width: 70px"/>
+                                        <input type="text" name="sku[]" id="sku" placeholder="SKU" style="width: 70px"/>
+                                        <input type="text" name="price[]" id="price" placeholder="Price" style="width: 70px"/>
+                                        <input type="text" name="stock[]" id="stock" placeholder="Stock" style="width: 70px"/>
+                                        <a href="javascript:void(0);" class="add_button" title="Add field">Add</a>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card mb-3">
+{{--                            <div class="card-body">--}}
+{{--                                <h2 class="h4 mb-3">Inventory</h2>--}}
+{{--                                <div class="row">--}}
+{{--                                    <div class="col-md-6">--}}
+{{--                                        <div class="mb-3">--}}
+{{--                                            <label for="sku">SKU (Stock Keeping Unit)</label>--}}
+{{--                                            <input type="text" name="sku" id="sku" class="form-control" placeholder="sku" value="{{ $product->sku }}">--}}
+{{--                                            <p class="error"></p>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="col-md-6">--}}
+{{--                                        <div class="mb-3">--}}
+{{--                                            <label for="barcode">Barcode</label>--}}
+{{--                                            <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Barcode" value="{{ $product->barcode }}">--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="col-md-12">--}}
+{{--                                        <div class="mb-3">--}}
+{{--                                            <div class="custom-control custom-checkbox">--}}
+{{--                                                <input type="hidden" name="track_qty" value="No">--}}
+{{--                                                <input class="custom-control-input" type="checkbox" id="track_qty" value="Yes" name="track_qty" {{ ($product->track_qty == 'Yes') ? 'checked' : ''}}>--}}
+{{--                                                <label for="track_qty" class="custom-control-label">Track Quantity</label>--}}
+{{--                                                <p class="error"></p>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="mb-3">--}}
+{{--                                            <input type="number" min="0" name="qty" id="qty" class="form-control" placeholder="Qty" value="{{ $product->qty }}">--}}
+{{--                                            <p class="error"></p>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                             <div class="card mb-3">
                                 <div class="card-body">
-                                    <h2 class="h4 mb-3">Realated Product</h2>
+                                    <h2 class="h4 mb-3">Related Product</h2>
                                     <div class="mb-3">
                                         <select multiple  class="related_product w-100" name="related_products[]" id="related_products">
                                             @if(!empty($relatedProducts))
@@ -161,6 +238,74 @@
                         </div>
                     </div>
                     <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h2 class="h4 mb-3">Product Color</h2>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="product_color" name="product_color" placeholder="Enter Product Color" value="{{ $product->product_color }}">
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                        @php $familyColors = \App\Models\Color::colors() @endphp
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h2 class="h4 mb-3">Family Color</h2>
+                                <div class="mb-3">
+                                    <select name="family_color" id="family_color" class="form-control">
+                                        <option value="">Select</option>
+                                        @foreach($familyColors as $color)
+                                            <option value="{{$color['color_name']}}" @if(!empty(@old('family_color')) && @old('family_color')==$color['color_name']) selected="" @elseif(!empty($product['family_color']) && $product['family_color']==$color['color_name']) selected="" @endif>{{$color['color_name']}}</option>
+                                        @endforeach
+                                    </select>
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+{{--                        <div class="card mb-3">--}}
+{{--                            <div class="card-body">--}}
+{{--                                <h2 class="h4 mb-3">Added Attributes</h2>--}}
+{{--                                <table style="background-color: #99ccff; width: 50%;" cellpadding="5">--}}
+{{--                                    <tr>--}}
+{{--                                        <th>ID</th>--}}
+{{--                                        <th>Size</th>--}}
+{{--                                        <th>SKU</th>--}}
+{{--                                        <th>Price</th>--}}
+{{--                                        <th>Stock</th>--}}
+{{--                                        <th>Actions</th>--}}
+{{--                                    </tr>--}}
+{{--                                    @foreach($product->attributes as $attribute)--}}
+{{--                                        <input type="hidden" name="attributeId[]" value="{{ $attribute->id }}">--}}
+{{--                                        <tr>--}}
+{{--                                            <td>{{ $attribute->id }}</td>--}}
+{{--                                            <td>{{ $attribute->size }}</td>--}}
+{{--                                            <td>{{ $attribute->sku }}</td>--}}
+{{--                                            <td>--}}
+{{--                                                <input style="width: 70px;" type="number" name="price[]" value="{{ $attribute->price }}" >--}}
+{{--                                            </td>--}}
+{{--                                            <td>--}}
+{{--                                                <input style="width: 70px;" type="number" name="stock[]" value="{{ $attribute->stock }}" >--}}
+{{--                                            </td>--}}
+{{--                                            <td></td>--}}
+{{--                                        </tr>--}}
+{{--                                    @endforeach--}}
+{{--                                </table>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="card mb-3">--}}
+{{--                            <div class="card-body">--}}
+{{--                                <h2 class="h4 mb-3">Add Attributes</h2>--}}
+{{--                                <div class="field_wrapper">--}}
+{{--                                    <div>--}}
+{{--                                        <input type="text" name="size[]" id="size" placeholder="Size" style="width: 70px"/>--}}
+{{--                                        <input type="text" name="sku[]" id="sku" placeholder="SKU" style="width: 70px"/>--}}
+{{--                                        <input type="text" name="price[]" id="price" placeholder="Price" style="width: 70px"/>--}}
+{{--                                        <input type="text" name="stock[]" id="stock" placeholder="Stock" style="width: 70px"/>--}}
+{{--                                        <a href="javascript:void(0);" class="add_button" title="Add field">Add</a>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Product status</h2>
@@ -379,6 +524,73 @@
                     }
                 });
             }
+        }
+
+        // Add Product Attribute Script
+        $(document).ready(function(){
+            var maxField = 10; //Input fields increment limitation
+            var addButton = $('.add_button'); //Add button selector
+            var wrapper = $('.field_wrapper'); //Input field wrapper
+            var fieldHTML = '<div><input type="text" name="size[]" placeholder="Size" style="width: 70px;"/>&nbsp;<input type="text" name="sku[]" placeholder="SKU" style="width: 70px;"/>&nbsp;<input type="text" name="price[]" placeholder="Price" style="width: 70px;"/>&nbsp;<input type="text" name="stock[]" placeholder="Stock" style="width: 70px;"/><a href="javascript:void(0);" class="remove_button">Remove</a></div>'; //New input field html
+            var x = 1; //Initial field counter is 1
+
+            // Once add button is clicked
+            $(addButton).click(function(){
+                //Check maximum number of input fields
+                if(x < maxField){
+                    x++; //Increase field counter
+                    $(wrapper).append(fieldHTML); //Add field html
+                }else{
+                    alert('A maximum of '+maxField+' fields are allowed to be added. ');
+                }
+            });
+
+            // Once remove button is clicked
+            $(wrapper).on('click', '.remove_button', function(e){
+                e.preventDefault();
+                $(this).parent('div').remove(); //Remove field html
+                x--; //Decrease field counter
+            });
+        });
+
+        function changeAttributeStatus(status,id) {
+            if(confirm("Are you sure you want to change status")) {
+                $.ajax({
+                    url: '{{ route("products.changeAttributeStatus") }}',
+                    type: 'get',
+                    data: {status:status, id:id},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        location.reload()
+                    }
+                });
+            }
+        }
+
+        function deleteAttribute(id){
+            var url = '{{ route("products.deleteAttribute","ID") }}';
+            var newUrl = url.replace("ID",id)
+
+            if(confirm("Are you sure you want to delete")) {
+                $.ajax({
+                    url: newUrl,
+                    type: 'delete',
+                    data: {},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        if(response['status'] === true){
+                            location.reload()
+                        }
+                    }
+                });
+            }
+
         }
     </script>
 

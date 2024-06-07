@@ -61,6 +61,18 @@
                                     @endif
                                     <br>
                                 </div>
+
+                                <div class="col-sm-4 invoice-col">
+                                    <strong>Feedback</strong>
+                                    @if($order->feedbacks->isNotEmpty())
+                                        @foreach($order->feedbacks as $feedback)
+                                                <p>{{ $feedback->feedback }}</p>
+                                                <p>{{ $feedback->created_at }}</p>
+                                        @endforeach
+                                    @else
+                                        <p>No feedback available for this order.</p>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div class="card-body table-responsive p-3">
@@ -145,6 +157,7 @@
                                 </div>
                             </form>
                         </div>
+
                     </div>
                 </div>
             </div>

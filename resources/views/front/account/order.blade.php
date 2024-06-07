@@ -32,6 +32,7 @@
                                         <th>Date Purchased</th>
                                         <th>Status</th>
                                         <th>Total</th>
+                                        <th>Manage</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -54,6 +55,9 @@
                                                         @endif
                                                     </td>
                                                     <td>${{ number_format($order->grand_total,2) }}</td>
+                                                    <td>
+                                                        <a href="{{ route('account.orderDetail',$order->id) }}" class="view-detail-link">View Details</a>
+                                                    </td>
                                                 </tr>
                                             @endforeach
 

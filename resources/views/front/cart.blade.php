@@ -48,42 +48,95 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($cartContent as $item)
-                                            <tr>
-                                                <td class="text-start">
-                                                    <div class="d-flex align-items-center">
-                                                        @if(!empty($item->options->productImage->image))
-                                                            <img class="card-img-top" src="{{ asset('uploads/product/small/'. $item->options->productImage->image) }}" >
-                                                        @else
-                                                            <img class="card-img-top" src="{{ asset('admin-ascsets/img/default-150x150.png') }}" >
-                                                        @endif
+                                    @foreach($cartContent as $item)
+                                        <tr>
+                                            <td class="text-start">
+                                                <div class="d-flex align-items-center">
+                                                    @if(!empty($item->options->productImage->image))
+                                                        <img class="card-img-top" src="{{ asset('uploads/product/small/'. $item->options->productImage->image) }}">
+                                                    @else
+                                                        <img class="card-img-top" src="{{ asset('admin-assets/img/default-150x150.png') }}">
+                                                    @endif
+                                                    <ul>
                                                         <h2>{{ $item->name }}</h2>
+                                                        <li>
+                                                            <span style="font-size: small">Size: {{ $item->options->size }}</span>
+                                                        </li>
+                                                        <li>
+                                                            <span style="font-size: small">Color: {{ $item->options->color }}</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td>${{ $item->price }}</td>
+                                            <td>
+                                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                                    <div class="input-group-btn">
+                                                        <button class="btn btn-sm btn-dark btn-minus p-2 pt-1 pb-1 sub" data-id="{{ $item->rowId }}">
+                                                            <i class="fa fa-minus"></i>
+                                                        </button>
                                                     </div>
-                                                </td>
-                                                <td>${{ $item->price }}</td>
-                                                <td>
-                                                    <div class="input-group quantity mx-auto" style="width: 100px;">
-                                                        <div class="input-group-btn">
-                                                            <button class="btn btn-sm btn-dark btn-minus p-2 pt-1 pb-1 sub" data-id="{{ $item->rowId }}">
-                                                                <i class="fa fa-minus"></i>
-                                                            </button>
-                                                        </div>
-                                                        <input type="text" class="form-control form-control-sm  border-0 text-center" value="{{ $item->qty }}">
-                                                        <div class="input-group-btn">
-                                                            <button class="btn btn-sm btn-dark btn-plus p-2 pt-1 pb-1 add" data-id="{{ $item->rowId }}">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
+                                                    <input type="text" class="form-control form-control-sm border-0 text-center" value="{{ $item->qty }}">
+                                                    <div class="input-group-btn">
+                                                        <button class="btn btn-sm btn-dark btn-plus p-2 pt-1 pb-1 add" data-id="{{ $item->rowId }}">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
                                                     </div>
-                                                </td>
-                                                <td>
-                                                   ${{ $item->price*$item->qty }}
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-danger" onclick="deleteItem('{{ $item->rowId }}');"><i class="fa fa-times"></i></button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                                </div>
+                                            </td>
+                                            <td>${{ $item->price * $item->qty }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-danger" onclick="deleteItem('{{ $item->rowId }}');"><i class="fa fa-times"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                    {{--                                        @foreach($cartContent as $item)--}}
+{{--                                            <tr>--}}
+{{--                                                <td class="text-start">--}}
+{{--                                                    <div class="d-flex align-items-center">--}}
+{{--                                                        @if(!empty($item->options->productImage->image))--}}
+{{--                                                            <img class="card-img-top" src="{{ asset('uploads/product/small/'. $item->options->productImage->image) }}" >--}}
+{{--                                                        @else--}}
+{{--                                                            <img class="card-img-top" src="{{ asset('admin-ascsets/img/default-150x150.png') }}" >--}}
+{{--                                                        @endif--}}
+{{--                                                            <ul>--}}
+{{--                                                                <h2>{{ $item->name }}</h2>--}}
+{{--                                                                <li>--}}
+{{--                                                                    <span style="font-size: small" >Size: </span>--}}
+{{--                                                                </li>--}}
+{{--                                                                <li>--}}
+{{--                                                                    <span style="font-size: small">Color: </span>--}}
+{{--                                                                </li>--}}
+{{--                                                            </ul>--}}
+{{--                                                    </div>--}}
+{{--                                                </td>--}}
+{{--                                                <td>${{ $item->price }}</td>--}}
+{{--                                                <td>--}}
+{{--                                                    <div class="input-group quantity mx-auto" style="width: 100px;">--}}
+{{--                                                        <div class="input-group-btn">--}}
+{{--                                                            <button class="btn btn-sm btn-dark btn-minus p-2 pt-1 pb-1 sub" data-id="{{ $item->rowId }}">--}}
+{{--                                                                <i class="fa fa-minus"></i>--}}
+{{--                                                            </button>--}}
+{{--                                                        </div>--}}
+{{--                                                        <input type="text" class="form-control form-control-sm  border-0 text-center" value="{{ $item->qty }}">--}}
+{{--                                                        <div class="input-group-btn">--}}
+{{--                                                            <button class="btn btn-sm btn-dark btn-plus p-2 pt-1 pb-1 add" data-id="{{ $item->rowId }}">--}}
+{{--                                                                <i class="fa fa-plus"></i>--}}
+{{--                                                            </button>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                </td>--}}
+{{--                                                <td>--}}
+{{--                                                   ${{ $item->price*$item->qty }}--}}
+{{--                                                </td>--}}
+{{--                                                <td>--}}
+{{--                                                    <button class="btn btn-sm btn-danger" onclick="deleteItem('{{ $item->rowId }}');"><i class="fa fa-times"></i></button>--}}
+{{--                                                </td>--}}
+{{--                                            </tr>--}}
+{{--                                        @endforeach--}}
+
+
                                     </tbody>
                                 </table>
                             </div>

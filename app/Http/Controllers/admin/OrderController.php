@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderFeedback;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 
@@ -67,5 +68,30 @@ class OrderController extends Controller
             'status' => true,
             'message' => $message
         ]);
+    }
+
+    public function cancelOrder(Request $request) {
+        $order = Order::find($request->order_id);
+
+        if ($order) {
+            // Kiểm tra trạng thái của đơn hàng
+            if ($order->status != 'pending') {
+                return response()->json(['status' => false, 'message' => 'Only pending orders can be cancelled']);
+            }
+
+            // Lưu feedback
+            $feedback = new OrderFeedback();
+            $feedback->order_id = $order->id;
+            $feedback->feedback = $request->feedback;
+            $feedback->save();
+
+            // Cập nhật trạng thái đơn hàng
+            $order->status = 'cancelled';
+            $order->save();
+
+            return response()->json(['status' => true, 'message' => 'Order cancelled successfully']);
+        }
+
+        return response()->json(['status' => false, 'message' => 'Order not found']);
     }
 }

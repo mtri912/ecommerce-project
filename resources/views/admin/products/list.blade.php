@@ -47,9 +47,9 @@
                             <th width="60">ID</th>
                             <th width="80"></th>
                             <th>Product</th>
-                            <th>Price</th>
-                            <th>Qty</th>
-                            <th>SKU</th>
+                            <th>Brand</th>
+                            <th>Category</th>
+                            <th>Sub Category</th>
                             <th width="100">Status</th>
                             <th width="100">Action</th>
                         </tr>
@@ -71,9 +71,9 @@
                                             @endif
                                         </td>
                                         <td><a href="#">{{ $product->title }}</a></td>
-                                        <td>{{ $product->price }}</td>
-                                        <td>{{ $product->qty }} left in Stock</td>
-                                        <td>{{ $product->sku }}</td>
+                                        <td>{{ $product->brand->name }}</td>
+                                        <td>{{ $product->category->name }}</td>
+                                        <td>{{ $product->subCategory->name }}</td>
                                         <td>
                                             @if($product->status == 1)
                                                 <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -111,13 +111,7 @@
                 </div>
                 <div class="card-footer clearfix">
                     {{ $products->links() }}
-{{--                    <ul class="pagination pagination m-0 float-right">--}}
-{{--                        <li class="page-item"><a class="page-link" href="#">«</a></li>--}}
-{{--                        <li class="page-item"><a class="page-link" href="#">1</a></li>--}}
-{{--                        <li class="page-item"><a class="page-link" href="#">2</a></li>--}}
-{{--                        <li class="page-item"><a class="page-link" href="#">3</a></li>--}}
-{{--                        <li class="page-item"><a class="page-link" href="#">»</a></li>--}}
-{{--                    </ul>--}}
+
                 </div>
             </div>
         </div>

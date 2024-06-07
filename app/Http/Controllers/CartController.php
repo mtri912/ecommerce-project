@@ -8,6 +8,7 @@ use App\Models\DiscountCoupon;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\ProductsAttribute;
 use App\Models\ShippingCharge;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -18,52 +19,172 @@ use Illuminate\Session\Store;
 
 class CartController extends Controller
 {
+//    public function addToCart(Request $request) {
+//        $product = Product::find($request->id);
+//
+//        if($product == null) {
+//            return response()->json([
+//                'status' => false,
+//                'message' => 'Record not found'
+//            ]);
+//        }
+//        if (Cart::count() > 0) {
+//
+//            $cartContent = Cart::content();
+//            $productAlreadyExist = false;
+//
+//            foreach ($cartContent as $item) {
+//                if($item->id == $product->id) {
+//                    $productAlreadyExist = true;
+//                    Cart::update($item->rowId, $item->qty + 1);
+//                }
+//            }
+//
+//            if ($productAlreadyExist == false) {
+//                Cart::add($product->id, $product->title, 1, $product->price, ['productImage' => (!empty($product->product_images)) ? $product->product_images->first() : '']);
+//
+//                $status = true;
+//                $message = '<strong>'.$product->title.'</strong> added in your cart successfully';
+//                session()->flash('success',$message);
+//            } else {
+//                $status = false;
+//                $message = $product->title.' already added in cart';
+//            }
+//        } else {
+//            Cart::add($product->id, $product->title, 1, $product->price, ['productImage' => (!empty($product->product_images)) ? $product->product_images->first() : '']);
+//            $status = true;
+//            $message = '<strong>'.$product->title.'</strong> added in your cart successfully';
+//            session()->flash('success',$message);
+//        }
+//
+//
+//        return response()->json([
+//            'status' => $status,
+//            'message' => $message
+//        ]);
+//    }
+
+//    public function addToCart(Request $request) {
+//        $product = Product::find($request->id);
+//
+//        if($product == null) {
+//            return response()->json([
+//                'status' => false,
+//                'message' => 'Record not found'
+//            ]);
+//        }
+//
+//        // Lấy màu sắc từ sản phẩm
+//        $color = $product->family_color; // Giả sử cột màu trong bảng sản phẩm là 'color'
+//        $size = $request->size;
+//
+//        if (Cart::count() > 0) {
+//            $cartContent = Cart::content();
+//            $productAlreadyExist = false;
+//
+//            foreach ($cartContent as $item) {
+//                if($item->id == $product->id && $item->family_color == $color && $item->options->size == $size) {
+//                    $productAlreadyExist = true;
+//                    Cart::update($item->rowId, $item->qty + 1);
+//                }
+//            }
+//
+//            if ($productAlreadyExist == false) {
+//                Cart::add($product->id, $product->title, 1, $product->price, [
+//                    'productImage' => (!empty($product->product_images)) ? $product->product_images->first() : '',
+//                    'color' => $color,
+//                    'size' => $size
+//                ]);
+//
+//                $status = true;
+//                $message = '<strong>'.$product->title.'</strong> added in your cart successfully';
+//                session()->flash('success', $message);
+//            } else {
+//                $status = false;
+//                $message = $product->title.' already added in cart';
+//            }
+//        } else {
+//            Cart::add($product->id, $product->title, 1, $product->price, [
+//                'productImage' => (!empty($product->product_images)) ? $product->product_images->first() : '',
+//                'color' => $color,
+//                'size' => $size
+//            ]);
+//            $status = true;
+//            $message = '<strong>'.$product->title.'</strong> added in your cart successfully';
+//            session()->flash('success', $message);
+//        }
+//
+//        return response()->json([
+//            'status' => $status,
+//            'message' => $message
+//        ]);
+//    }
+
     public function addToCart(Request $request) {
         $product = Product::find($request->id);
 
-        if($product == null) {
+        if ($product == null) {
             return response()->json([
                 'status' => false,
                 'message' => 'Record not found'
             ]);
         }
-        if (Cart::count() > 0) {
 
+        // Lấy giá trị màu và kích thước từ sản phẩm
+        $color = $product->family_color; // Giả sử cột màu trong bảng sản phẩm là 'color'
+        $size = $request->size;
+
+        // Lấy giá trị final_price dựa trên kích thước sản phẩm
+        $attributePrice = Product::getAttributePrice($product->id, $size);
+        $finalPrice = $attributePrice['final_price'];
+
+        if (Cart::count() > 0) {
             $cartContent = Cart::content();
             $productAlreadyExist = false;
 
             foreach ($cartContent as $item) {
-                if($item->id == $product->id) {
+                if ($item->id == $product->id && $item->family_color == $color && $item->options->size == $size) {
                     $productAlreadyExist = true;
                     Cart::update($item->rowId, $item->qty + 1);
                 }
             }
 
             if ($productAlreadyExist == false) {
-                Cart::add($product->id, $product->title, 1, $product->price, ['productImage' => (!empty($product->product_images)) ? $product->product_images->first() : '']);
+                Cart::add($product->id, $product->title, 1, $finalPrice, [
+                    'productImage' => (!empty($product->product_images)) ? $product->product_images->first() : '',
+                    'color' => $color,
+                    'size' => $size
+                ]);
 
                 $status = true;
                 $message = '<strong>'.$product->title.'</strong> added in your cart successfully';
-                session()->flash('success',$message);
+                session()->flash('success', $message);
             } else {
                 $status = false;
                 $message = $product->title.' already added in cart';
             }
         } else {
-            Cart::add($product->id, $product->title, 1, $product->price, ['productImage' => (!empty($product->product_images)) ? $product->product_images->first() : '']);
+            Cart::add($product->id, $product->title, 1, $finalPrice, [
+                'productImage' => (!empty($product->product_images)) ? $product->product_images->first() : '',
+                'color' => $color,
+                'size' => $size
+            ]);
             $status = true;
             $message = '<strong>'.$product->title.'</strong> added in your cart successfully';
-            session()->flash('success',$message);
+            session()->flash('success', $message);
         }
-
 
         return response()->json([
             'status' => $status,
             'message' => $message
         ]);
     }
+
+
+
     public function cart() {
         $cartContent = Cart::content();
+//        echo "<pre>"; print_r($cartContent); die;
         $data['cartContent'] = $cartContent;
         return view('front.cart',$data);
     }
@@ -304,6 +425,7 @@ class CartController extends Controller
                 $orderItem->product_id = $item->id;
                 $orderItem->order_id = $order->id;
                 $orderItem->name = $item->name;
+                $orderItem->size = $item->options->size;
                 $orderItem->qty = $item->qty;
                 $orderItem->price = $item->price;
                 $orderItem->total = $item->price*$item->qty;
@@ -316,6 +438,13 @@ class CartController extends Controller
                     $updatedQty = $currentQty-$item->qty;
                     $productData->qty = $updatedQty;
                     $productData->save();
+                }
+
+                if($request->payment_method == 'cod') {
+                    // Reduce Stock Script Start
+                    $getProductstock = ProductsAttribute::productStock($item->id,$item->options->size);
+                    $newStock = $getProductstock - $item->qty;
+                    ProductsAttribute::where(['product_id'=>$item->id,'size'=>$item->options->size])->update(['stock'=>$newStock]);
                 }
             }
 

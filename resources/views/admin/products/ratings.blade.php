@@ -58,7 +58,10 @@
                                 <tr>
                                     <td>{{ $rating->id }}</td>
                                     <td>{{ $rating->productTitle }}</td>
-                                    <td>{{ $rating->rating }}</td>
+                                    <td>{{ $rating->rating }}
+
+                                        <i class="fa fa-star-o" style="font-size:15px;color:yellow"></i>
+                                    </td>
                                     <td>{{ $rating->comment }}</td>
                                     <td>{{ $rating->username }}</td>
                                     <td>

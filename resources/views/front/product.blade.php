@@ -42,13 +42,6 @@
                     <div class="bg-light right">
                         <h1>{{ $product->title }}</h1>
                         <div class="d-flex mb-3">
-{{--                            <div class="text-primary mr-2">--}}
-{{--                                <small class="fas fa-star"></small>--}}
-{{--                                <small class="fas fa-star"></small>--}}
-{{--                                <small class="fas fa-star"></small>--}}
-{{--                                <small class="fas fa-star-half-alt"></small>--}}
-{{--                                <small class="far fa-star"></small>--}}
-{{--                            </div>--}}
                             <div class="star-rating product mt-2" title="">
                                 <div class="back-stars">
                                     <i class="fa fa-star" aria-hidden="true"></i>
@@ -75,27 +68,51 @@
                             <h2 class="price text-secondary"><del>${{ $product->compare_price }}</del></h2>
                         @endif
 
-                        <h2 class="price ">${{ $product->price }}</h2>
+                        <h2 class="getAttributePrice">${{ $product->product_price }}</h2>
 
                         {!! $product->short_description !!}
 
 
 
-                    @if($product->track_qty == 'Yes')
-                            @if($product->qty > 0)
+                        <div class="u-s-m-b-15">
+{{--                            <form class="pd-detail__form">--}}
+                                <div class="u-s-m-b-15">
+
+                                    <span class="pd-detail__label u-s-m-b-8">Color:</span>
+                                    <div class="pd-detail__color">
+
+                                            <a href="#">
+                                                <div class="color__radio" >
+                                                    <label class="color__radio-label" for="space-cadet" style="background-color: {{ $product->family_color }};"></label>
+                                                </div>
+                                            </a>
+                                    </div>
+                                </div>
+
+
+                                <div class="u-s-m-b-15">
+
+                                    <span class="pd-detail__label u-s-m-b-8">Size:</span>
+                                    <div class="pd-detail__size">
+                                        @foreach($product['attributes'] as $attribute)
+                                            @if($attribute['status'] == 1 && $attribute->stock > 0)
+                                            <div class="size__radio">
+
+                                                <input type="radio" id="{{$attribute['size']}}" name="size" value="{{$attribute['size']}}" product-id="{{$product['id']}}" class="getPrice" checked>
+
+                                                <label class="size__radio-label" for="{{$attribute['size']}}">{{$attribute['size']}}</label>
+                                            </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+
+
                                 <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $product->id }});">
                                     <i class="fa fa-shopping-cart"></i> &nbsp;Add To Cart
                                 </a>
-                            @else
-                                <a class="btn btn-dark" href="javascript:void(0);">
-                                    Out Of Stock
-                                </a>
-                            @endif
-                        @else
-                            <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $product->id }});">
-                                <i class="fa fa-shopping-cart"></i> &nbsp;Add To Cart
-                            </a>
-                        @endif
+
+                    </div>
                     </div>
 
                 </div>
@@ -254,21 +271,9 @@
                                     <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
 
                                     <div class="product-action">
-                                        @if($relProduct->track_qty == 'Yes')
-                                            @if($relProduct->qty > 0)
                                                 <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $relProduct->id }});">
                                                     <i class="fa fa-shopping-cart"></i> Add To Cart
                                                 </a>
-                                            @else
-                                                <a class="btn btn-dark" href="javascript:void(0);">
-                                                    Out Of Stock
-                                                </a>
-                                            @endif
-                                        @else
-                                            <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $relProduct->id }});">
-                                                <i class="fa fa-shopping-cart"></i> Add To Cart
-                                            </a>
-                                        @endif
                                     </div>
                                 </div>
                                 <div class="card-body text-center mt-3">
@@ -352,6 +357,29 @@
                }
            })
         });
+
+        $(document).ready(function() {
+            $(".getPrice").change(function() {
+                var size = $(this).val();
+                var product_id = $(this).attr("product-id");
+                $.ajax({
+                    url: '/get-attribute-price',
+                    data: { size: size, product_id: product_id },
+                    type: 'post',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(resp) {
+                        // alert(resp);
+                        $(".getAttributePrice").html("<h2 class='getAttributePrice'>$"+resp['final_price']+"</h2>");
+                    },
+                    error: function() {
+                        alert("Error");
+                    }
+                });
+            });
+        });
+
     </script>
 @endsection
 

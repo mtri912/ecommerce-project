@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DiscountCodeController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\PageController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\ProductAttributeController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +46,8 @@ use Illuminate\Support\Str;
 Route::get('/',[FrontController::class,'index'])->name('front.home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('front.shop');
 Route::get('/product/{slug}',[ShopController::class,'product'])->name('front.product');
+// Get Product Attribute Price
+Route::post('get-attribute-price',[ShopController::class,'getAttributePrice'])->name('front.getAttributePrice');
 Route::get('/cart',[CartController::class,'cart'])->name('front.cart');
 Route::post('/add-to-cart',[CartController::class,'addToCart'])->name('front.addToCart');
 Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.updateCart');
@@ -55,6 +59,11 @@ Route::post('/get-order-summery',[CartController::class,'getOrderSummery'])->nam
 Route::post('/apply-discount',[CartController::class,'applyDiscount'])->name('front.applyDiscount');
 Route::post('/remove-discount',[CartController::class,'removeCoupon'])->name('front.removeCoupon');
 Route::post('/add-to-wishlist',[FrontController::class,'addToWishlist'])->name('front.addToWishlist');
+Route::get('/page/{slug}',[FrontController::class,'page'])->name('front.page');
+Route::post('/send-contact-email',[FrontController::class,'sendContactEmail'])->name('front.sendContactEmail');
+
+Route::post('/order/cancel', [OrderController::class, 'cancelOrder'])->name('order.cancel');
+
 
 
 Route::get('/forgot-password',[AuthController::class,'forgotPassword'])->name('front.forgotPassword');
@@ -135,6 +144,15 @@ Route::group(['prefix' => 'admin'], function (){
         Route::get('/get-products',[ProductController::class,'getProducts'])->name('products.getProducts');
         Route::get('/ratings',[ProductController::class,'productRatings'])->name('products.productRatings');
         Route::get('/change-rating-status',[ProductController::class,'changeRatingStatus'])->name('products.changeRatingStatus');
+        Route::get('/change-attribute-status',[ProductController::class,'changeAttributeStatus'])->name('products.changeAttributeStatus');
+        Route::delete('/deleteAtt/{att}',[ProductController::class,'deleteAttribute'])->name('products.deleteAttribute');
+
+//         Product Attributes
+//        Route::post('update-attribute-status',[ProductController::class,'updateAttributeStatus'])->name('product.updateAttributeStatus');
+//        Route::get('delete-attribute/{id}',[ProductController::class,'deleteAttribute'])->name('product.deleteAttribute');
+
+//        Route::get('/inventory',[ProductController::class,'inventory'])->name('products.inventory');
+        Route::get('/product-attributes', [ProductAttributeController::class, 'index'])->name('products.attribute.index');
 
         Route::get('/products-subcategories',[ProductSubCategoryController::class,'index'])->name('products-subcategories.index');
 
@@ -169,6 +187,14 @@ Route::group(['prefix' => 'admin'], function (){
         Route::get('/users/{user}/edit',[UserController::class,'edit'])->name('users.edit');
         Route::put('/users/{user}',[UserController::class,'update'])->name('users.update');
         Route::delete('/users/{user}',[UserController::class,'destroy'])->name('users.delete');
+
+        // Pages Routes
+        Route::get('/pages',[PageController::class,'index'])->name('pages.index');
+        Route::get('/pages/create',[PageController::class,'create'])->name('pages.create');
+        Route::post('/pages',[PageController::class,'store'])->name('pages.store');
+        Route::get('/pages/{page}/edit',[PageController::class,'edit'])->name('pages.edit');
+        Route::put('/pages/{page}',[PageController::class,'update'])->name('pages.update');
+        Route::delete('/pages/{page}',[PageController::class,'destroy'])->name('pages.delete');
 
         //temp-images.create
         Route::post('/uploads-temp-image',[TempImagesController::class,'create'])->name('temp-images.create');

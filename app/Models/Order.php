@@ -12,4 +12,9 @@ class Order extends Model
     public function items() {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function feedbacks()
+    {
+        return $this->hasMany(OrderFeedback::class);
+    }
 }
